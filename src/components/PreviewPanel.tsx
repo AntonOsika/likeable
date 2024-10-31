@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Code, Copy, RotateCw } from "lucide-react";
+import { Copy, RotateCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface PreviewPanelProps {
@@ -14,7 +14,6 @@ const PreviewPanel = ({
   generatedHtml, 
   isLoading, 
   showCode, 
-  setShowCode, 
   setGeneratedHtml 
 }: PreviewPanelProps) => {
   const { toast } = useToast();
@@ -26,13 +25,6 @@ const PreviewPanel = ({
           <span>{showCode ? "HTML Code" : "HTML Preview"}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <Button 
-            className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
-            onClick={() => setShowCode(!showCode)}
-            disabled={!generatedHtml}
-          >
-            <Code className="h-4 w-4 text-white" />
-          </Button>
           <Button 
             className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
             onClick={() => {

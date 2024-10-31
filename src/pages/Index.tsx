@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import Navigation from "@/components/Navigation";
 import PreviewPanel from "@/components/PreviewPanel";
+import CodeBox from "@/components/CodeBox";
 
 const Index = () => {
   const [prompt, setPrompt] = useState("");
@@ -31,15 +32,13 @@ const Index = () => {
 
       if (error) throw error;
 
-      // Process the response to remove HTML code from fullResponse
       let displayResponse = data.fullResponse;
       const htmlMatch = displayResponse.match(/```html\n([\s\S]*?)\n```/);
       if (htmlMatch) {
-        displayResponse = displayResponse.replace(htmlMatch[0], '[Click the code/preview toggle button to view the generated HTML]');
+        displayResponse = displayResponse.replace(htmlMatch[0], '');
       }
       setFullResponse(displayResponse);
 
-      // Set the HTML code separately for the preview/code panel
       if (data.htmlCode) {
         setGeneratedHtml(data.htmlCode);
       } else {
@@ -66,7 +65,10 @@ const Index = () => {
           <div className="flex-1 p-4 overflow-y-auto prose prose-markdown prose-zinc dark:prose-invert max-w-full prose-h1:text-xl prose-h1:font-bold prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h3:font-bold prose-h3:text-base">
             <div className="mb-4">
               {fullResponse && (
-                <div className="text-sm whitespace-pre-wrap">{fullResponse}</div>
+                <>
+                  <div className="text-sm whitespace-pre-wrap">{fullResponse}</div>
+                  {generatedHtml && <CodeBox showCode={showCode} setShowCode={setShowCode} />}
+                </>
               )}
             </div>
 
