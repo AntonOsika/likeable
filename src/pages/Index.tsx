@@ -32,12 +32,11 @@ const Index = () => {
 
       if (error) throw error;
 
-      // Split the response at the HTML code block
-      const parts = data.fullResponse.split(/```html\n[\s\S]*?\n```/);
-      setFullResponse(parts.join('<CODE_SPLIT>'));  // Use a marker where the code should go
+      const parts = data.fullResponse.split(/```html\n([\s\S]*?)\n```/);
+      setFullResponse(parts.join(''));  // Remove the marker since we'll handle spacing in the render
 
       if (data.htmlCode) {
-        setGeneratedHtml(data.htmlCode);
+        setGeneratedHtml(data.htmlCode.trim()); // Trim the HTML code
       } else {
         setGeneratedHtml(null);
       }
@@ -63,10 +62,10 @@ const Index = () => {
             <div className="mb-4">
               {fullResponse && (
                 <div className="text-sm whitespace-pre-wrap">
-                  {fullResponse.split('<CODE_SPLIT>').map((part, index, array) => (
+                  {fullResponse.split('\n').map((part, index) => (
                     <span key={index}>
                       {part}
-                      {index < array.length - 1 && generatedHtml && (
+                      {generatedHtml && index === 0 && (
                         <CodeBox showCode={showCode} setShowCode={setShowCode} />
                       )}
                     </span>
