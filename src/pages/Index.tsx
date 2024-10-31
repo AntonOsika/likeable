@@ -6,7 +6,6 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/compon
 const Index = () => {
   return (
     <div className="h-screen overflow-hidden bg-[#09090B] text-white">
-      {/* Top Navigation Bar */}
       <nav className="px-4 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Button variant="ghost" className="p-0 h-auto hover:bg-transparent">
@@ -60,15 +59,6 @@ const Index = () => {
               <p className="text-sm mb-4">
                 If your project requires backend functionality, you can use the Supabase menu on the top right to connect your project to Supabase.
               </p>
-              <div>
-                <Button variant="outline" size="sm" className="flex items-center space-x-2 bg-[#242428]">
-                  <Settings className="h-4 w-4" />
-                  <span>Manage knowledge</span>
-                </Button>
-                <Button variant="outline" size="sm" className="bg-[#242428]">
-                  Supabase integration docs
-                </Button>
-              </div>
             </div>
 
             <div className="space-y-4">
