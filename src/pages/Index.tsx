@@ -107,7 +107,7 @@ const Index = () => {
         {/* Preview Area */}
         <div className="flex-1 bg-gray-900 rounded-lg border border-gray-800">
           {/* URL Bar */}
-          <div className="bg-black border border-gray-800 px-4 py-2 flex items-center justify-between">
+          <div className="bg-black border-b border-[#09090B] px-4 py-2 flex items-center justify-between">
             <div className="flex items-center space-x-2 text-gray-400">
               <span>preview--three-js-magic.gptengineer.run</span>
               <span>/</span>
