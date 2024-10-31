@@ -96,7 +96,7 @@ const Index = () => {
           <div className="p-4">
             <Input 
               placeholder="Request a change..." 
-              className="bg-[#18181B] border-0 focus:bg-[#27272A] rounded-xl focus:outline-none focus:ring-0"
+              className="flex rounded-md ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 placeholder-shown:whitespace-nowrap placeholder-shown:text-ellipsis relative w-full px-3 py-3 resize-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 text-base leading-snug scrollbar-thin scrollbar-track-transparent text-primary z-20 scrollbar-thumb-[#636575] max-h-[200px] pr-8"
             />
             <p className="text-xs text-gray-500 mt-2 text-center">
               Build front-end with React, Tailwind & Vite.
