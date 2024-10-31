@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { History, Settings, Database, Github, Globe, Copy, Smartphone, RotateCw, Undo } from "lucide-react";
+import { History, Settings, Database, Github, Globe, Copy, RotateCw } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
