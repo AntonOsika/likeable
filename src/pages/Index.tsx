@@ -76,12 +76,12 @@ const Index = () => {
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   </div>
                 ) : (
-                  <div className="ml-4">
+                  <div>
                     <div className="flex items-center space-x-1.5 mb-1.5">
                       <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-4 w-4" />
                       <span className="font-medium text-sm">Lovable</span>
                     </div>
-                    <div className="text-sm whitespace-pre-wrap">
+                    <div className="ml-4 text-sm whitespace-pre-wrap">
                       {message.content.split('\n').map((part, index) => (
                         <span key={index}>
                           {part}
