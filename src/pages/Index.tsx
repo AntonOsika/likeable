@@ -9,14 +9,14 @@ const Index = () => {
       {/* Top Navigation Bar */}
       <nav className="px-4 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon" className="text-orange-500">
-            <Heart className="h-5 w-5" />
+          <Button className="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5">
+            <Heart className="h-4 w-4 text-orange-500" />
           </Button>
-          <Button variant="ghost" size="icon">
-            <Copy className="h-5 w-5" />
+          <Button className="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5">
+            <Copy className="h-4 w-4 text-[#A1A1AA]" />
           </Button>
-          <Button variant="ghost" size="sm" className="flex items-center space-x-2 bg-[#242428]">
-            <History className="h-4 w-4" />
+          <Button className="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5">
+            <History className="h-4 w-4 text-[#A1A1AA]" />
             <span>Show history</span>
           </Button>
         </div>
