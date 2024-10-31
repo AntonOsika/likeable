@@ -6,12 +6,18 @@ import Navigation from "@/components/Navigation";
 import PreviewPanel from "@/components/PreviewPanel";
 import CodeBox from "@/components/CodeBox";
 
+interface Message {
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
   const [fullResponse, setFullResponse] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
   const { toast } = useToast();
 
   const handleSubmit = async () => {
@@ -25,6 +31,8 @@ const Index = () => {
     }
 
     setIsLoading(true);
+    setMessages(prev => [...prev, { role: 'user', content: prompt }]);
+    
     try {
       const { data, error } = await supabase.functions.invoke('generate-html', {
         body: { prompt },
@@ -33,10 +41,11 @@ const Index = () => {
       if (error) throw error;
 
       const parts = data.fullResponse.split(/```html\n([\s\S]*?)\n```/);
-      setFullResponse(parts.join(''));  // Remove the marker since we'll handle spacing in the render
+      setFullResponse(parts.join(''));
+      setMessages(prev => [...prev, { role: 'assistant', content: data.fullResponse }]);
 
       if (data.htmlCode) {
-        setGeneratedHtml(data.htmlCode.trim()); // Trim the HTML code
+        setGeneratedHtml(data.htmlCode.trim());
       } else {
         setGeneratedHtml(null);
       }
@@ -49,6 +58,7 @@ const Index = () => {
       });
     } finally {
       setIsLoading(false);
+      setPrompt("");
     }
   };
 
@@ -58,28 +68,33 @@ const Index = () => {
 
       <div className="flex h-[calc(100vh-3rem)]">
         <div className="w-96 flex flex-col">
-          <div className="flex-1 p-4 overflow-y-auto prose prose-markdown prose-zinc dark:prose-invert max-w-full prose-h1:text-xl prose-h1:font-bold prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h3:font-bold prose-h3:text-base">
-            <div className="mb-4">
-              {fullResponse && (
-                <div className="text-sm whitespace-pre-wrap">
-                  {fullResponse.split('\n').map((part, index) => (
-                    <span key={index}>
-                      {part}
-                      {generatedHtml && index === 0 && (
-                        <CodeBox showCode={showCode} setShowCode={setShowCode} />
-                      )}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-4">
-              <div className="flex items-start space-x-2">
-                <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-5 w-5 mt-1" />
-                <span className="font-medium">Lovable</span>
+          <div className="flex-1 p-4 overflow-y-auto">
+            {messages.map((message, idx) => (
+              <div key={idx} className="mb-6">
+                {message.role === 'user' ? (
+                  <div className="bg-[#18181B] rounded-lg p-4">
+                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="flex items-center space-x-2 mb-2">
+                      <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-5 w-5" />
+                      <span className="font-medium">Lovable</span>
+                    </div>
+                    <div className="text-sm whitespace-pre-wrap">
+                      {message.content.split('\n').map((part, index) => (
+                        <span key={index}>
+                          {part}
+                          {generatedHtml && index === 0 && (
+                            <CodeBox showCode={showCode} setShowCode={setShowCode} />
+                          )}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-            </div>
+            ))}
           </div>
 
           <div className="p-4">
