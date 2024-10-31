@@ -5,7 +5,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/compon
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-[#09090B] text-white">
+    <div className="h-screen bg-[#09090B] text-white">
       {/* Top Navigation Bar */}
       <nav className="px-4 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
@@ -52,7 +52,7 @@ const Index = () => {
       </nav>
 
       {/* Main Content Area */}
-      <div className="flex h-[calc(100vh-116px)]">
+      <div className="flex h-[calc(100vh-48px)]">
         {/* Left Sidebar */}
         <div className="w-96 flex flex-col">
           <div className="flex-1 p-4 overflow-y-auto">
