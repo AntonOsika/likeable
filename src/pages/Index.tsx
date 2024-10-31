@@ -30,21 +30,20 @@ const Index = () => {
 
       if (error) throw error;
 
+      // Always show the full response in the sidebar
+      setFullResponse(data.fullResponse);
+
+      // Only set HTML if it exists
       if (data.htmlCode) {
         setGeneratedHtml(data.htmlCode);
-        setFullResponse(data.fullResponse);
       } else {
-        toast({
-          title: "No HTML generated",
-          description: "The AI response didn't contain any HTML code",
-          variant: "destructive",
-        });
+        setGeneratedHtml(null);
       }
     } catch (error) {
       console.error('Error generating HTML:', error);
       toast({
         title: "Error",
-        description: "Failed to generate HTML code",
+        description: "Failed to generate content",
         variant: "destructive",
       });
     } finally {
@@ -139,12 +138,14 @@ const Index = () => {
                     });
                   }
                 }}
+                disabled={!generatedHtml}
               >
                 <Copy className="h-4 w-4 text-white" />
               </Button>
               <Button 
                 className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
                 onClick={() => setGeneratedHtml(null)}
+                disabled={!generatedHtml}
               >
                 <RotateCw className="h-4 w-4 text-white" />
               </Button>
@@ -158,7 +159,7 @@ const Index = () => {
                   <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center animate-spin">
                     <RotateCw className="h-8 w-8 text-white" />
                   </div>
-                  <p className="text-gray-400">Generating HTML...</p>
+                  <p className="text-gray-400">Generating content...</p>
                 </div>
               </div>
             ) : generatedHtml ? (
@@ -174,7 +175,7 @@ const Index = () => {
                   <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
                     <span className="text-2xl">{">"}</span>
                   </div>
-                  <p className="text-gray-400">Enter a prompt to generate HTML</p>
+                  <p className="text-gray-400">Enter a prompt to generate content</p>
                 </div>
               </div>
             )}
