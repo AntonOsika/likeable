@@ -72,14 +72,14 @@ const Index = () => {
             {messages.map((message, idx) => (
               <div key={idx} className="mb-6">
                 {message.role === 'user' ? (
-                  <div className="bg-[#18181B] rounded-lg p-4">
+                  <div className="bg-[#18181B] rounded-lg p-4 max-w-[85%] ml-auto">
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
                   </div>
                 ) : (
-                  <div>
-                    <div className="flex items-center space-x-2 mb-2">
-                      <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-5 w-5" />
-                      <span className="font-medium">Lovable</span>
+                  <div className="ml-4">
+                    <div className="flex items-center space-x-1.5 mb-1.5">
+                      <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-4 w-4" />
+                      <span className="font-medium text-sm">Lovable</span>
                     </div>
                     <div className="text-sm whitespace-pre-wrap">
                       {message.content.split('\n').map((part, index) => (
