@@ -1,14 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Heart, History, Settings, Database, Github, Globe, Copy, Smartphone, RotateCw, Undo } from "lucide-react";
-import { Separator } from "@/components/ui/separator";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-[#09090B] text-white">
       {/* Top Navigation Bar */}
-      <nav className="border-b border-gray-800 px-4 py-2 flex items-center justify-between">
+      <nav className="px-4 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Button variant="ghost" size="icon" className="text-orange-500">
             <Heart className="h-5 w-5" />
@@ -52,33 +51,10 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* URL Bar */}
-      <div className="border-b border-gray-800 px-4 py-2 flex items-center justify-between">
-        <div className="flex items-center space-x-2 text-gray-400">
-          <span>preview--three-js-magic.gptengineer.run</span>
-          <span>/</span>
-          <span>index</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button variant="ghost" size="icon">
-            <Copy className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Smartphone className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <RotateCw className="h-5 w-5" />
-          </Button>
-          <Button variant="ghost" size="icon">
-            <Undo className="h-5 w-5" />
-          </Button>
-        </div>
-      </div>
-
       {/* Main Content Area */}
       <div className="flex h-[calc(100vh-116px)]">
         {/* Left Sidebar */}
-        <div className="w-96 border-r border-gray-800 flex flex-col">
+        <div className="w-96 flex flex-col">
           <div className="flex-1 p-4 overflow-y-auto">
             <div className="mb-4">
               <p className="text-sm mb-4">
@@ -94,8 +70,6 @@ const Index = () => {
                 </Button>
               </div>
             </div>
-
-            <Separator className="my-4" />
 
             <div className="space-y-4">
               <div className="flex items-start space-x-2">
@@ -119,7 +93,7 @@ const Index = () => {
           </div>
 
           {/* Input Section */}
-          <div className="p-4 border-t border-gray-800">
+          <div className="p-4">
             <Input 
               placeholder="Request a change..." 
               className="bg-[#27272A] border-gray-700"
@@ -131,12 +105,37 @@ const Index = () => {
         </div>
 
         {/* Preview Area */}
-        <div className="flex-1 bg-gray-900 p-4 flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
-              <span className="text-2xl">{">"}</span>
+        <div className="flex-1 bg-gray-900 rounded-lg p-4">
+          {/* URL Bar */}
+          <div className="px-4 py-2 flex items-center justify-between">
+            <div className="flex items-center space-x-2 text-gray-400">
+              <span>preview--three-js-magic.gptengineer.run</span>
+              <span>/</span>
+              <span>index</span>
             </div>
-            <p className="text-gray-400">Spinning up preview</p>
+            <div className="flex items-center space-x-2">
+              <Button variant="ghost" size="icon">
+                <Copy className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Smartphone className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <RotateCw className="h-5 w-5" />
+              </Button>
+              <Button variant="ghost" size="icon">
+                <Undo className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+          
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                <span className="text-2xl">{">"}</span>
+              </div>
+              <p className="text-gray-400">Spinning up preview</p>
+            </div>
           </div>
         </div>
       </div>
