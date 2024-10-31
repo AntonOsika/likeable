@@ -32,12 +32,9 @@ const Index = () => {
 
       if (error) throw error;
 
-      let displayResponse = data.fullResponse;
-      const htmlMatch = displayResponse.match(/```html\n([\s\S]*?)\n```/);
-      if (htmlMatch) {
-        displayResponse = displayResponse.replace(htmlMatch[0], '');
-      }
-      setFullResponse(displayResponse);
+      // Split the response at the HTML code block
+      const parts = data.fullResponse.split(/```html\n[\s\S]*?\n```/);
+      setFullResponse(parts.join('<CODE_SPLIT>'));  // Use a marker where the code should go
 
       if (data.htmlCode) {
         setGeneratedHtml(data.htmlCode);
@@ -65,10 +62,16 @@ const Index = () => {
           <div className="flex-1 p-4 overflow-y-auto prose prose-markdown prose-zinc dark:prose-invert max-w-full prose-h1:text-xl prose-h1:font-bold prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h3:font-bold prose-h3:text-base">
             <div className="mb-4">
               {fullResponse && (
-                <>
-                  <div className="text-sm whitespace-pre-wrap">{fullResponse}</div>
-                  {generatedHtml && <CodeBox showCode={showCode} setShowCode={setShowCode} />}
-                </>
+                <div className="text-sm whitespace-pre-wrap">
+                  {fullResponse.split('<CODE_SPLIT>').map((part, index, array) => (
+                    <span key={index}>
+                      {part}
+                      {index < array.length - 1 && generatedHtml && (
+                        <CodeBox showCode={showCode} setShowCode={setShowCode} />
+                      )}
+                    </span>
+                  ))}
+                </div>
               )}
             </div>
 
@@ -102,7 +105,6 @@ const Index = () => {
           generatedHtml={generatedHtml}
           isLoading={isLoading}
           showCode={showCode}
-          setShowCode={setShowCode}
           setGeneratedHtml={setGeneratedHtml}
         />
       </div>
