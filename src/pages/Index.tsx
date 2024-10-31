@@ -9,6 +9,7 @@ const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
+  const [fullResponse, setFullResponse] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleSubmit = async () => {
@@ -31,6 +32,7 @@ const Index = () => {
 
       if (data.htmlCode) {
         setGeneratedHtml(data.htmlCode);
+        setFullResponse(data.fullResponse);
       } else {
         toast({
           title: "No HTML generated",
@@ -89,9 +91,9 @@ const Index = () => {
         <div className="w-96 flex flex-col">
           <div className="flex-1 p-4 overflow-y-auto prose prose-markdown prose-zinc dark:prose-invert max-w-full prose-h1:text-xl prose-h1:font-bold prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h3:font-bold prose-h3:text-base">
             <div className="mb-4">
-              <p className="text-sm mb-4">
-                Enter a prompt to generate HTML code. The generated code will be displayed in the preview area.
-              </p>
+              {fullResponse && (
+                <div className="text-sm whitespace-pre-wrap">{fullResponse}</div>
+              )}
             </div>
 
             <div className="space-y-4">
