@@ -114,16 +114,16 @@ const Index = () => {
               <span>index</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Button variant="ghost" size="icon">
+              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex">
                 <Copy className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex">
                 <Smartphone className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex">
                 <RotateCw className="h-5 w-5" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex">
                 <Undo className="h-5 w-5" />
               </Button>
             </div>
