@@ -105,9 +105,9 @@ const Index = () => {
         </div>
 
         {/* Preview Area */}
-        <div className="flex-1 bg-gray-900 rounded-lg p-4">
+        <div className="flex-1 bg-gray-900 rounded-lg">
           {/* URL Bar */}
-          <div className="px-4 py-2 flex items-center justify-between">
+          <div className="bg-black border-b border-gray-800 px-4 py-2 flex items-center justify-between">
             <div className="flex items-center space-x-2 text-gray-400">
               <span>preview--three-js-magic.gptengineer.run</span>
               <span>/</span>
@@ -129,7 +129,7 @@ const Index = () => {
             </div>
           </div>
           
-          <div className="flex items-center justify-center h-full">
+          <div className="flex items-center justify-center h-full p-4">
             <div className="text-center">
               <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
                 <span className="text-2xl">{">"}</span>
