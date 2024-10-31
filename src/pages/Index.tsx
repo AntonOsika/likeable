@@ -96,7 +96,7 @@ const Index = () => {
           <div className="p-4">
             <Input 
               placeholder="Request a change..." 
-              className="bg-[#27272A] border-gray-700"
+              className="bg-[#18181B] border-0 focus:bg-[#27272A]"
             />
             <p className="text-xs text-gray-500 mt-2 text-center">
               Build front-end with React, Tailwind & Vite.
