@@ -1,9 +1,55 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { History, Settings, Database, Github, Globe, Copy, Smartphone, RotateCw, Undo } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const Index = () => {
+  const [prompt, setPrompt] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
+  const { toast } = useToast();
+
+  const handleSubmit = async () => {
+    if (!prompt.trim()) {
+      toast({
+        title: "Error",
+        description: "Please enter a prompt",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('generate-html', {
+        body: { prompt },
+      });
+
+      if (error) throw error;
+
+      if (data.htmlCode) {
+        setGeneratedHtml(data.htmlCode);
+      } else {
+        toast({
+          title: "No HTML generated",
+          description: "The AI response didn't contain any HTML code",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error generating HTML:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate HTML code",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="h-screen overflow-hidden bg-[#09090B] text-white">
       <nav className="px-4 py-2 flex items-center justify-between">
@@ -39,14 +85,12 @@ const Index = () => {
         </div>
       </nav>
 
-      {/* Main Content Area */}
       <div className="flex h-[calc(100vh-3rem)]">
-        {/* Left Sidebar */}
         <div className="w-96 flex flex-col">
           <div className="flex-1 p-4 overflow-y-auto prose prose-markdown prose-zinc dark:prose-invert max-w-full prose-h1:text-xl prose-h1:font-bold prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h3:font-bold prose-h3:text-base">
             <div className="mb-4">
               <p className="text-sm mb-4">
-                If your project requires backend functionality, you can use the Supabase menu on the top right to connect your project to Supabase.
+                Enter a prompt to generate HTML code. The generated code will be displayed in the preview area.
               </p>
             </div>
 
@@ -55,66 +99,83 @@ const Index = () => {
                 <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-5 w-5 mt-1" />
                 <span className="font-medium">Lovable</span>
               </div>
-              <p className="text-sm text-gray-300">
-                Hi! I see you have a Three.js scene already set up in your project. It currently shows a rotating green cube with proper lighting and responsive behavior. Would you like to modify this scene or create something new with Three.js? I can help you:
-              </p>
-              <ul className="list-decimal pl-6 text-sm text-gray-300 space-y-2">
-                <li>Add different 3D shapes</li>
-                <li>Change colors and materials</li>
-                <li>Add more complex animations</li>
-                <li>Implement user interactions</li>
-                <li>Add more advanced lighting effects</li>
-              </ul>
-              <p className="text-sm text-gray-300">
-                Let me know what specific changes or features you'd like to explore!
-              </p>
             </div>
           </div>
 
-          {/* Input Section */}
           <div className="p-4">
-            <Input 
-              placeholder="Request a change..." 
-              className="bg-[#18181B] border-0 focus:bg-[#27272A] rounded-xl focus:outline-none focus:ring-0"
-            />
+            <form onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}>
+              <Input 
+                placeholder="Request HTML generation..." 
+                className="bg-[#18181B] border-0 focus:bg-[#27272A] rounded-xl focus:outline-none focus:ring-0"
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+              />
+            </form>
             <p className="text-xs text-gray-500 mt-2 text-center">
-              Build front-end with React, Tailwind & Vite.
+              Press Enter to generate HTML code
             </p>
           </div>
         </div>
 
-        {/* Preview Area */}
         <div className="flex-1 bg-gray-900 rounded-lg border border-gray-800">
-          {/* URL Bar */}
           <div className="bg-black border-b border-[#09090B] px-4 py-2 flex items-center justify-between rounded-t-lg">
             <div className="flex items-center space-x-2 text-gray-400">
-              <span>preview--three-js-magic.gptengineer.run</span>
-              <span>/</span>
-              <span>index</span>
+              <span>HTML Preview</span>
             </div>
             <div className="flex items-center space-x-2">
-              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]">
+              <Button 
+                className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
+                onClick={() => {
+                  if (generatedHtml) {
+                    navigator.clipboard.writeText(generatedHtml);
+                    toast({
+                      title: "Copied!",
+                      description: "HTML code copied to clipboard",
+                    });
+                  }
+                }}
+              >
                 <Copy className="h-4 w-4 text-white" />
               </Button>
-              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]">
-                <Smartphone className="h-4 w-4 text-white" />
-              </Button>
-              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]">
+              <Button 
+                className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
+                onClick={() => setGeneratedHtml(null)}
+              >
                 <RotateCw className="h-4 w-4 text-white" />
-              </Button>
-              <Button className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]">
-                <Undo className="h-4 w-4 text-white" />
               </Button>
             </div>
           </div>
           
-          <div className="flex items-center justify-center h-full p-4">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
-                <span className="text-2xl">{">"}</span>
+          <div className="h-[calc(100%-3rem)] w-full">
+            {isLoading ? (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center animate-spin">
+                    <RotateCw className="h-8 w-8 text-white" />
+                  </div>
+                  <p className="text-gray-400">Generating HTML...</p>
+                </div>
               </div>
-              <p className="text-gray-400">Spinning up preview</p>
-            </div>
+            ) : generatedHtml ? (
+              <iframe
+                srcDoc={generatedHtml}
+                className="w-full h-full bg-white rounded-b-lg"
+                sandbox="allow-scripts"
+                title="Generated HTML Preview"
+              />
+            ) : (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
+                    <span className="text-2xl">{">"}</span>
+                  </div>
+                  <p className="text-gray-400">Enter a prompt to generate HTML</p>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>
