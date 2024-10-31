@@ -21,17 +21,6 @@ const Index = () => {
         </div>
 
         <div className="flex items-center space-x-2">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button className="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5">
-                three-js-magic
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              {/* Add dropdown items here */}
-            </DropdownMenuContent>
-          </DropdownMenu>
-
           <Button className="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5">
             <Settings className="h-4 w-4 text-[#A1A1AA]" />
           </Button>
