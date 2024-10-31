@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Heart, History, Settings, Database, Github, Globe, Copy, Mobile, RotateCw, Undo } from "lucide-react";
+import { Heart, History, Settings, Database, Github, Globe, Copy, Smartphone, RotateCw, Undo } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
@@ -64,7 +64,7 @@ const Index = () => {
             <Copy className="h-5 w-5" />
           </Button>
           <Button variant="ghost" size="icon">
-            <Mobile className="h-5 w-5" />
+            <Smartphone className="h-5 w-5" />
           </Button>
           <Button variant="ghost" size="icon">
             <RotateCw className="h-5 w-5" />
