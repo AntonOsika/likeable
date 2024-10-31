@@ -60,7 +60,7 @@ const Index = () => {
               <p className="text-sm mb-4">
                 If your project requires backend functionality, you can use the Supabase menu on the top right to connect your project to Supabase.
               </p>
-              <div className="flex space-x-2">
+              <div>
                 <Button variant="outline" size="sm" className="flex items-center space-x-2 bg-[#242428]">
                   <Settings className="h-4 w-4" />
                   <span>Manage knowledge</span>
