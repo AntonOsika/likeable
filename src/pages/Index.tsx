@@ -55,7 +55,7 @@ const Index = () => {
       <div className="flex h-[calc(100vh-3rem)]">
         {/* Left Sidebar */}
         <div className="w-96 flex flex-col">
-          <div className="flex-1 p-4 overflow-y-auto">
+          <div className="flex-1 p-4 overflow-y-auto prose prose-markdown prose-zinc dark:prose-invert max-w-full prose-h1:text-xl prose-h1:font-bold prose-h1:mb-2 prose-h2:text-lg prose-h2:font-bold prose-h3:font-bold prose-h3:text-base">
             <div className="mb-4">
               <p className="text-sm mb-4">
                 If your project requires backend functionality, you can use the Supabase menu on the top right to connect your project to Supabase.
