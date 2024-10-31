@@ -6,14 +6,13 @@ interface PreviewPanelProps {
   generatedHtml: string | null;
   isLoading: boolean;
   showCode: boolean;
-  setShowCode: (show: boolean) => void;
   setGeneratedHtml: (html: string | null) => void;
 }
 
 const PreviewPanel = ({ 
   generatedHtml, 
   isLoading, 
-  showCode, 
+  showCode,
   setGeneratedHtml 
 }: PreviewPanelProps) => {
   const { toast } = useToast();
