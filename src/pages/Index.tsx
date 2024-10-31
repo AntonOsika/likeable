@@ -5,12 +5,12 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/compon
 
 const Index = () => {
   return (
-    <div className="h-screen bg-[#09090B] text-white">
+    <div className="h-screen overflow-hidden bg-[#09090B] text-white">
       {/* Top Navigation Bar */}
       <nav className="px-4 py-2 flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <Button variant="ghost" className="p-0 h-auto hover:bg-transparent">
-            <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-4 w-4" />
+            <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-3.5 w-3.5" />
           </Button>
           <Button className="inline-flex items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5">
             <Copy className="h-4 w-4 text-[#A1A1AA]" />
@@ -52,7 +52,7 @@ const Index = () => {
       </nav>
 
       {/* Main Content Area */}
-      <div className="flex h-[calc(100vh-48px)]">
+      <div className="flex h-[calc(100vh-3rem)]">
         {/* Left Sidebar */}
         <div className="w-96 flex flex-col">
           <div className="flex-1 p-4 overflow-y-auto">
