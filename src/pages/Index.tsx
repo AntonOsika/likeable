@@ -1,5 +1,5 @@
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import Navigation from "@/components/Navigation";
@@ -20,7 +20,7 @@ const Index = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: session } = useQuery({
+  const { data: session, isLoading: isSessionLoading } = useQuery({
     queryKey: ['session'],
     queryFn: async () => {
       const { data: { session }, error } = await supabase.auth.getSession();
@@ -63,6 +63,17 @@ const Index = () => {
     }
   });
 
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        setShowAuthDialog(false);
+        queryClient.invalidateQueries({ queryKey: ['session'] });
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, [queryClient]);
+
   const handleSubmit = async (e?: React.FormEvent) => {
     if (e) {
       e.preventDefault();
@@ -77,16 +88,18 @@ const Index = () => {
       return;
     }
 
-    if (!session?.user) {
+    if (!session?.user && !isSessionLoading) {
       setShowAuthDialog(true);
       return;
     }
 
     setIsLoading(true);
-    const currentPrompt = prompt; // Store the current prompt value
-    setPrompt(""); // Clear the input immediately after submission
+    const currentPrompt = prompt;
+    setPrompt("");
     
     try {
+      if (!session?.user?.id) return;
+
       await addMessage.mutateAsync({
         role: 'user',
         content: currentPrompt,
