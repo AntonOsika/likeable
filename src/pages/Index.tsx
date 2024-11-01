@@ -38,19 +38,17 @@ const Index = () => {
         .order('created_at', { ascending: true });
       
       if (error) throw error;
-      
-      // Ensure the role is either 'user' or 'assistant'
       return messages.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'assistant',
+        role: msg.role,
         content: msg.content
-      } as Message));
+      }));
     },
     enabled: !!session?.user?.id,
   });
 
   // Add message mutation
   const addMessage = useMutation({
-    mutationFn: async (message: { role: 'user' | 'assistant'; content: string; user_id: string }) => {
+    mutationFn: async (message: { role: string; content: string; user_id: string }) => {
       const { error } = await supabase
         .from('chat_messages')
         .insert([message]);
@@ -96,6 +94,8 @@ const Index = () => {
       });
 
       if (error) throw error;
+
+      const parts = data.fullResponse.split(/```html\n([\s\S]*?)\n```/);
       
       // Add assistant message
       await addMessage.mutateAsync({
