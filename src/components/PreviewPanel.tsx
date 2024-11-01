@@ -54,7 +54,9 @@ const PreviewPanel = ({
         {isLoading ? (
           <div className="flex items-center justify-center h-full bg-[#09090B]">
             <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-2xl mx-auto mb-4 animate-bounce" />
+              <div className="w-16 h-16 bg-white rounded-3xl mx-auto mb-4 animate-bounce flex items-center justify-center">
+                <span className="text-3xl text-black font-mono font-bold">&gt;_</span>
+              </div>
               <p className="text-gray-400">Generating content...</p>
             </div>
           </div>
@@ -91,7 +93,7 @@ const PreviewPanel = ({
         ) : (
           <div className="flex items-center justify-center h-full bg-[#09090B]">
             <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-2xl mx-auto mb-4 flex items-center justify-center">
+              <div className="w-16 h-16 bg-white rounded-3xl mx-auto mb-4 flex items-center justify-center">
                 <span className="text-3xl text-black font-mono font-bold">&gt;_</span>
               </div>
               <p className="text-gray-400">Enter a prompt to generate content</p>
