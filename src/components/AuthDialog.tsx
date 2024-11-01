@@ -22,7 +22,7 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Sign in to continue</DialogTitle>
+          <DialogTitle className="font-light">Sign in to continue</DialogTitle>
           <DialogDescription>
             Please sign in or create an account to use the HTML generator.
           </DialogDescription>
