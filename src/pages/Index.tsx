@@ -1,10 +1,11 @@
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import Navigation from "@/components/Navigation";
 import PreviewPanel from "@/components/PreviewPanel";
 import CodeBox from "@/components/CodeBox";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -15,10 +16,40 @@ const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
-  const [fullResponse, setFullResponse] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  // Fetch messages query
+  const { data: messages = [] } = useQuery({
+    queryKey: ['messages'],
+    queryFn: async () => {
+      const { data: messages, error } = await supabase
+        .from('chat_messages')
+        .select('*')
+        .order('created_at', { ascending: true });
+      
+      if (error) throw error;
+      return messages.map(msg => ({
+        role: msg.role,
+        content: msg.content
+      }));
+    }
+  });
+
+  // Add message mutation
+  const addMessage = useMutation({
+    mutationFn: async (message: { role: string; content: string }) => {
+      const { error } = await supabase
+        .from('chat_messages')
+        .insert([message]);
+      
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['messages'] });
+    }
+  });
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -31,9 +62,14 @@ const Index = () => {
     }
 
     setIsLoading(true);
-    setMessages(prev => [...prev, { role: 'user', content: prompt }]);
     
     try {
+      // Add user message
+      await addMessage.mutateAsync({
+        role: 'user',
+        content: prompt
+      });
+
       const { data, error } = await supabase.functions.invoke('generate-html', {
         body: { prompt },
       });
@@ -41,8 +77,12 @@ const Index = () => {
       if (error) throw error;
 
       const parts = data.fullResponse.split(/```html\n([\s\S]*?)\n```/);
-      setFullResponse(parts.join(''));
-      setMessages(prev => [...prev, { role: 'assistant', content: data.fullResponse }]);
+      
+      // Add assistant message
+      await addMessage.mutateAsync({
+        role: 'assistant',
+        content: data.fullResponse
+      });
 
       if (data.htmlCode) {
         setGeneratedHtml(data.htmlCode.trim());
