@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Settings, Code, Copy } from "lucide-react";
+import { Code, Copy, Globe } from "lucide-react";
 
 const Navigation = () => (
   <nav className="px-4 py-2 flex items-center justify-between">
