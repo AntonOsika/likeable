@@ -18,6 +18,22 @@ interface AuthDialogProps {
 const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const { toast } = useToast();
 
+  const handleError = (error: Error) => {
+    if (error.message.includes("User already registered")) {
+      toast({
+        title: "Account exists",
+        description: "Please sign in with your existing account",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -38,21 +54,7 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
           }}
           theme="dark"
           providers={[]}
-          onError={(error) => {
-            if (error.message.includes("User already registered")) {
-              toast({
-                title: "Account exists",
-                description: "Please sign in with your existing account",
-                variant: "destructive",
-              });
-            } else {
-              toast({
-                title: "Error",
-                description: error.message,
-                variant: "destructive",
-              });
-            }
-          }}
+          onError={handleError}
         />
       </DialogContent>
     </Dialog>
