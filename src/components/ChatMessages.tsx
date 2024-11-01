@@ -36,7 +36,7 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
       {messages.map((message, idx) => (
         <div key={idx}>
           {message.role === 'user' ? (
-            <div className="bg-[#18181B] rounded-lg p-2.5 max-w-[85%] ml-auto">
+            <div className="bg-[#18181B] rounded-lg p-3 max-w-[85%] ml-auto">
               <p className="text-sm whitespace-pre-wrap">{renderMessageContent(message.content)}</p>
             </div>
           ) : (
