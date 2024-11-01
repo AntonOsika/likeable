@@ -39,19 +39,11 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
           theme="dark"
           providers={[]}
           onError={(error) => {
-            if (error.message.includes("User already registered")) {
-              toast({
-                title: "Account exists",
-                description: "Please sign in with your existing account",
-                variant: "destructive",
-              });
-            } else {
-              toast({
-                title: "Error",
-                description: error.message,
-                variant: "destructive",
-              });
-            }
+            toast({
+              title: "Error",
+              description: error.message,
+              variant: "destructive",
+            });
           }}
         />
       </DialogContent>
