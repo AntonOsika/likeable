@@ -28,13 +28,16 @@ const Index = () => {
     },
   });
 
-  // Fetch messages query
+  // Fetch messages query with proper typing
   const { data: messages = [] } = useQuery<Message[]>({
-    queryKey: ['messages'],
+    queryKey: ['messages', session?.user?.id],
     queryFn: async () => {
+      if (!session?.user?.id) return [];
+      
       const { data: messages, error } = await supabase
         .from('chat_messages')
         .select('*')
+        .eq('user_id', session.user.id)
         .order('created_at', { ascending: true });
       
       if (error) throw error;
@@ -47,7 +50,7 @@ const Index = () => {
     enabled: !!session?.user?.id,
   });
 
-  // Add message mutation
+  // Add message mutation with proper typing
   const addMessage = useMutation({
     mutationFn: async (message: { role: 'user' | 'assistant'; content: string; user_id: string }) => {
       const { error } = await supabase
@@ -57,7 +60,7 @@ const Index = () => {
       if (error) throw error;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['messages'] });
+      queryClient.invalidateQueries({ queryKey: ['messages', session?.user?.id] });
     }
   });
 
@@ -96,8 +99,6 @@ const Index = () => {
 
       if (error) throw error;
 
-      const parts = data.fullResponse.split(/```html\n([\s\S]*?)\n```/);
-      
       // Add assistant message
       await addMessage.mutateAsync({
         role: 'assistant',
