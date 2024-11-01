@@ -20,6 +20,16 @@ const Index = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
+  // Get current user
+  const { data: session } = useQuery({
+    queryKey: ['session'],
+    queryFn: async () => {
+      const { data: { session }, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      return session;
+    },
+  });
+
   // Fetch messages query
   const { data: messages = [] } = useQuery({
     queryKey: ['messages'],
@@ -34,15 +44,23 @@ const Index = () => {
         role: msg.role,
         content: msg.content
       }));
-    }
+    },
+    enabled: !!session?.user?.id,
   });
 
   // Add message mutation
   const addMessage = useMutation({
     mutationFn: async (message: { role: string; content: string }) => {
+      if (!session?.user?.id) {
+        throw new Error("User must be logged in to send messages");
+      }
+
       const { error } = await supabase
         .from('chat_messages')
-        .insert([message]);
+        .insert([{
+          ...message,
+          user_id: session.user.id
+        }]);
       
       if (error) throw error;
     },
@@ -56,6 +74,15 @@ const Index = () => {
       toast({
         title: "Error",
         description: "Please enter a prompt",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!session?.user) {
+      toast({
+        title: "Error",
+        description: "Please sign in to continue",
         variant: "destructive",
       });
       return;
