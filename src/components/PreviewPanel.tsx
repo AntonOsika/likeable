@@ -19,7 +19,7 @@ const PreviewPanel = ({
 
   return (
     <div className="flex-1 bg-gray-900 rounded-lg border border-gray-800">
-      <div className="bg-black border-b border-[#09090B] px-4 py-2 flex items-center justify-between rounded-t-lg">
+      <div className="bg-[#09090B] border-b border-[#09090B] px-4 py-2 flex items-center justify-between rounded-t-lg">
         <div className="flex items-center space-x-2 text-gray-400">
           <span>{showCode ? "HTML Code" : "HTML Preview"}</span>
         </div>
