@@ -18,14 +18,14 @@ const PreviewPanel = ({
   const { toast } = useToast();
 
   return (
-    <div className="flex-1 bg-gray-900 rounded-lg border border-gray-800">
-      <div className="bg-[#09090B] border-b border-[#09090B] px-4 py-2 flex items-center justify-between rounded-t-lg">
+    <div className="flex-1 bg-gray-900 rounded-xl border border-[#27272A]">
+      <div className="bg-[#09090B] border-b border-[#27272A] px-4 py-2 flex items-center justify-between rounded-t-xl">
         <div className="flex items-center space-x-2 text-gray-400">
           <span>{showCode ? "HTML Code" : "HTML Preview"}</span>
         </div>
         <div className="flex items-center space-x-2">
           <Button 
-            className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
+            className="items-center justify-center text-sm font-light ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
             onClick={() => {
               if (generatedHtml) {
                 navigator.clipboard.writeText(generatedHtml);
@@ -40,7 +40,7 @@ const PreviewPanel = ({
             <Copy className="h-4 w-4 text-white" />
           </Button>
           <Button 
-            className="items-center justify-center text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
+            className="items-center justify-center text-sm font-light ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
             onClick={() => setGeneratedHtml(null)}
             disabled={!generatedHtml}
           >
@@ -61,7 +61,7 @@ const PreviewPanel = ({
           </div>
         ) : generatedHtml ? (
           showCode ? (
-            <div className="w-full h-full bg-[#1E1E1E] p-4 overflow-auto">
+            <div className="w-full h-full bg-[#1E1E1E] p-4 overflow-auto rounded-b-xl">
               <pre className="text-white">
                 <code>{generatedHtml}</code>
               </pre>
@@ -69,7 +69,7 @@ const PreviewPanel = ({
           ) : (
             <iframe
               srcDoc={generatedHtml}
-              className="w-full h-full bg-white rounded-b-lg"
+              className="w-full h-full bg-white rounded-b-xl"
               sandbox="allow-scripts"
               title="Generated HTML Preview"
             />
