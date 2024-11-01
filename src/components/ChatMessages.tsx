@@ -57,20 +57,16 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
                 </div>
                 <div className="flex gap-2 mt-2">
                   <Button 
-                    variant="secondary" 
-                    size="sm"
-                    className="rounded-xl bg-[#18181B] hover:bg-[#27272A]"
+                    className="inline-flex items-center justify-center text-sm font-light ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5"
                   >
-                    <RotateCcw className="h-4 w-4 mr-2" />
-                    Restore
+                    <RotateCcw className="h-4 w-4 text-[#A1A1AA]" />
+                    <span>Restore</span>
                   </Button>
                   <Button 
-                    variant="secondary" 
-                    size="sm"
-                    className="rounded-xl bg-[#18181B] hover:bg-[#27272A]"
+                    className="inline-flex items-center justify-center text-sm font-light ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-[#242428] text-white callout hover:bg-primary/20 border border-zinc-700 h-7 rounded-md px-2 py-1 gap-1.5"
                   >
-                    <ExternalLink className="h-4 w-4 mr-2" />
-                    View
+                    <ExternalLink className="h-4 w-4 text-[#A1A1AA]" />
+                    <span>View</span>
                   </Button>
                 </div>
               </div>
