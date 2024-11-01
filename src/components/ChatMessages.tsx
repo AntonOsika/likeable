@@ -36,7 +36,9 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
               </div>
               <div className="ml-4 text-sm whitespace-pre-wrap">
                 {filterCodeBlocks(message.content)}
-                {generatedHtml && <CodeBox showCode={showCode} setShowCode={setShowCode} />}
+                {message.content.includes('```html') && generatedHtml && (
+                  <CodeBox showCode={showCode} setShowCode={setShowCode} />
+                )}
               </div>
             </div>
           )}
