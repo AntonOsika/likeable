@@ -17,7 +17,6 @@ const Index = () => {
   const [showCode, setShowCode] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(() => {
-    // Initialize from localStorage on component mount
     const saved = localStorage.getItem("generatedHtml");
     return saved ? saved : null;
   });
@@ -25,7 +24,6 @@ const Index = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Update localStorage whenever generatedHtml changes
   useEffect(() => {
     if (generatedHtml) {
       localStorage.setItem("generatedHtml", generatedHtml);
@@ -120,10 +118,13 @@ const Index = () => {
         user_id: session.user.id
       });
 
+      // Get only the last 3 messages for context
+      const recentMessages = messages.slice(-3);
+
       const { data, error } = await supabase.functions.invoke('generate-html', {
         body: { 
           prompt: currentPrompt,
-          chatHistory: messages 
+          chatHistory: recentMessages 
         },
       });
 
@@ -153,7 +154,6 @@ const Index = () => {
   return (
     <div className="h-screen overflow-hidden bg-[#09090B] text-white">
       <Navigation />
-
       <div className="flex h-[calc(100vh-3rem)]">
         <div className="w-96 flex flex-col">
           <ChatMessages 
@@ -162,7 +162,6 @@ const Index = () => {
             setShowCode={setShowCode}
             generatedHtml={generatedHtml}
           />
-
           <div className="p-4">
             <form onSubmit={handleSubmit} className="relative">
               <Input 
@@ -185,7 +184,6 @@ const Index = () => {
             </p>
           </div>
         </div>
-
         <PreviewPanel 
           generatedHtml={generatedHtml}
           isLoading={isLoading}
@@ -193,7 +191,6 @@ const Index = () => {
           setGeneratedHtml={setGeneratedHtml}
         />
       </div>
-
       <AuthDialog 
         open={showAuthDialog} 
         onOpenChange={setShowAuthDialog}
