@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect } from "react";
 
 interface AuthDialogProps {
   open: boolean;
@@ -17,6 +18,18 @@ interface AuthDialogProps {
 
 const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
   const { toast } = useToast();
+
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'SIGNED_IN') {
+        onOpenChange(false);
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [onOpenChange]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
