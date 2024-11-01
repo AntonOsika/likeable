@@ -1,5 +1,7 @@
 import { Message } from "@/types/chat";
 import CodeBox from "@/components/CodeBox";
+import { Button } from "@/components/ui/button";
+import { RotateCcw, ExternalLink } from "lucide-react";
 
 interface ChatMessagesProps {
   messages: Message[];
@@ -49,8 +51,28 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
                 />
                 <span className="font-medium text-sm">Lovable</span>
               </div>
-              <div className="ml-4 text-sm whitespace-pre-wrap">
-                {renderMessageContent(message.content)}
+              <div className="ml-4">
+                <div className="text-sm whitespace-pre-wrap">
+                  {renderMessageContent(message.content)}
+                </div>
+                <div className="flex gap-2 mt-2">
+                  <Button 
+                    variant="secondary" 
+                    size="sm"
+                    className="rounded-xl bg-[#18181B] hover:bg-[#27272A]"
+                  >
+                    <RotateCcw className="h-4 w-4 mr-2" />
+                    Restore
+                  </Button>
+                  <Button 
+                    variant="secondary" 
+                    size="sm"
+                    className="rounded-xl bg-[#18181B] hover:bg-[#27272A]"
+                  >
+                    <ExternalLink className="h-4 w-4 mr-2" />
+                    View
+                  </Button>
+                </div>
               </div>
             </div>
           )}
