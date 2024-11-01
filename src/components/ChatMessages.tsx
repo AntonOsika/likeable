@@ -10,6 +10,7 @@ interface ChatMessagesProps {
 
 const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMessagesProps) => {
   const renderMessageContent = (content: string) => {
+    // Split by code blocks first
     const parts = content.split(/(```html[\s\S]*?```)/);
     return parts.map((part, index) => {
       if (part.startsWith('```html')) {
@@ -18,8 +19,14 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
           <CodeBox key={index} showCode={showCode} setShowCode={setShowCode} />
         ) : null;
       }
-      // This is regular text, render it normally
-      return <span key={index}>{part}</span>;
+      // For non-code parts, remove markdown syntax and render
+      const cleanText = part
+        .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold syntax
+        .replace(/\*(.*?)\*/g, '$1')      // Remove italic syntax
+        .replace(/`(.*?)`/g, '$1')        // Remove inline code syntax
+        .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // Remove link syntax
+        .trim();
+      return <span key={index}>{cleanText}</span>;
     });
   };
 
@@ -29,7 +36,7 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
         <div key={idx}>
           {message.role === 'user' ? (
             <div className="bg-[#18181B] rounded-lg p-4 max-w-[85%] ml-auto">
-              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+              <p className="text-sm whitespace-pre-wrap">{renderMessageContent(message.content)}</p>
             </div>
           ) : (
             <div>
