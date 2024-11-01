@@ -54,9 +54,7 @@ const PreviewPanel = ({
         {isLoading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
-              <div className="w-16 h-16 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center animate-spin">
-                <RotateCw className="h-8 w-8 text-white" />
-              </div>
+              <div className="w-16 h-16 bg-white rounded-2xl mx-auto mb-4 animate-bounce" />
               <p className="text-gray-400">Generating content...</p>
             </div>
           </div>
