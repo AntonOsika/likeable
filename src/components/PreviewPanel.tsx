@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Copy, RotateCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { Highlight, themes } from "prism-react-renderer";
 
 interface PreviewPanelProps {
   generatedHtml: string | null;
@@ -61,10 +62,25 @@ const PreviewPanel = ({
           </div>
         ) : generatedHtml ? (
           showCode ? (
-            <div className="w-full h-full bg-[#1E1E1E] p-4 overflow-auto rounded-b-xl">
-              <pre className="text-white">
-                <code>{generatedHtml}</code>
-              </pre>
+            <div className="w-full h-full overflow-auto rounded-b-xl">
+              <Highlight
+                theme={themes.nightOwl}
+                code={generatedHtml}
+                language="html"
+              >
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                  <pre className={`${className} p-4`} style={style}>
+                    {tokens.map((line, i) => (
+                      <div key={i} {...getLineProps({ line })}>
+                        <span className="text-gray-500 mr-4">{i + 1}</span>
+                        {line.map((token, key) => (
+                          <span key={key} {...getTokenProps({ token })} />
+                        ))}
+                      </div>
+                    ))}
+                  </pre>
+                )}
+              </Highlight>
             </div>
           ) : (
             <iframe
