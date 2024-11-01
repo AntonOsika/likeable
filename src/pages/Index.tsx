@@ -20,7 +20,6 @@ const Index = () => {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Get current user
   const { data: session } = useQuery({
     queryKey: ['session'],
     queryFn: async () => {
@@ -30,7 +29,6 @@ const Index = () => {
     },
   });
 
-  // Fetch messages query with proper typing
   const { data: messages = [] } = useQuery<Message[]>({
     queryKey: ['messages', session?.user?.id],
     queryFn: async () => {
@@ -52,7 +50,6 @@ const Index = () => {
     enabled: !!session?.user?.id,
   });
 
-  // Add message mutation with proper typing
   const addMessage = useMutation({
     mutationFn: async (message: { role: 'user' | 'assistant'; content: string; user_id: string }) => {
       const { error } = await supabase
@@ -86,25 +83,25 @@ const Index = () => {
     }
 
     setIsLoading(true);
+    const currentPrompt = prompt; // Store the current prompt value
+    setPrompt(""); // Clear the input immediately after submission
     
     try {
-      // Add user message
       await addMessage.mutateAsync({
         role: 'user',
-        content: prompt,
+        content: currentPrompt,
         user_id: session.user.id
       });
 
       const { data, error } = await supabase.functions.invoke('generate-html', {
         body: { 
-          prompt,
+          prompt: currentPrompt,
           chatHistory: messages 
         },
       });
 
       if (error) throw error;
 
-      // Add assistant message
       await addMessage.mutateAsync({
         role: 'assistant',
         content: data.fullResponse,
@@ -125,7 +122,6 @@ const Index = () => {
       });
     } finally {
       setIsLoading(false);
-      setPrompt("");
     }
   };
 
