@@ -25,6 +25,7 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
         .replace(/\*(.*?)\*/g, '$1')      // Remove italic syntax
         .replace(/`(.*?)`/g, '$1')        // Remove inline code syntax
         .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // Remove link syntax
+        .replace(/#/g, '')                // Remove hashtag characters
         .trim();
       return <span key={index}>{cleanText}</span>;
     });
