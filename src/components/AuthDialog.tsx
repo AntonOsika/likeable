@@ -23,13 +23,17 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
       if (event === 'SIGNED_IN') {
         onOpenChange(false);
+        toast({
+          title: "Welcome!",
+          description: "You're now signed in and ready to start.",
+        });
       }
     });
 
     return () => {
       subscription.unsubscribe();
     };
-  }, [onOpenChange]);
+  }, [onOpenChange, toast]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -47,10 +51,20 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
             style: {
               button: { background: '#000', color: 'white' },
               anchor: { color: '#666' }
+            },
+            variables: {
+              default: {
+                colors: {
+                  brand: '#000',
+                  brandAccent: '#333'
+                }
+              }
             }
           }}
           theme="dark"
           providers={[]}
+          redirectTo={window.location.origin}
+          onlyThirdPartyProviders={false}
         />
       </DialogContent>
     </Dialog>
