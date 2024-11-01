@@ -14,11 +14,25 @@ import { ArrowUp } from "lucide-react";
 const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [generatedHtml, setGeneratedHtml] = useState<string | null>(() => {
+    // Initialize from localStorage on component mount
+    const saved = localStorage.getItem("generatedHtml");
+    return saved ? saved : null;
+  });
+  
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Update localStorage whenever generatedHtml changes
+  useEffect(() => {
+    if (generatedHtml) {
+      localStorage.setItem("generatedHtml", generatedHtml);
+    } else {
+      localStorage.removeItem("generatedHtml");
+    }
+  }, [generatedHtml]);
 
   const { data: session, isLoading: isSessionLoading } = useQuery({
     queryKey: ['session'],
@@ -123,8 +137,6 @@ const Index = () => {
 
       if (data.htmlCode) {
         setGeneratedHtml(data.htmlCode.trim());
-      } else {
-        setGeneratedHtml(null);
       }
     } catch (error) {
       console.error('Error generating HTML:', error);
