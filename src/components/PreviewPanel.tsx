@@ -19,7 +19,7 @@ const PreviewPanel = ({
   const { toast } = useToast();
 
   return (
-    <div className="flex-1 bg-gray-900 rounded-xl border border-[#27272A]">
+    <div className="flex-1 bg-[#09090B] rounded-xl border border-[#27272A]">
       <div className="bg-[#09090B] border-b border-[#27272A] px-4 py-2 flex items-center justify-between rounded-t-xl">
         <div className="flex items-center space-x-2 text-gray-400">
           <span>{showCode ? "HTML Code" : "HTML Preview"}</span>
@@ -62,7 +62,7 @@ const PreviewPanel = ({
           </div>
         ) : generatedHtml ? (
           showCode ? (
-            <div className="w-full h-full overflow-auto rounded-b-xl">
+            <div className="w-full h-full overflow-auto rounded-b-xl bg-[#09090B]">
               <Highlight
                 theme={themes.nightOwl}
                 code={generatedHtml}
