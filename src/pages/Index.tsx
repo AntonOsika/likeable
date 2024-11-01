@@ -1,25 +1,13 @@
 import { Input } from "@/components/ui/input";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import Navigation from "@/components/Navigation";
 import PreviewPanel from "@/components/PreviewPanel";
-import CodeBox from "@/components/CodeBox";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-interface Message {
-  role: 'user' | 'assistant';
-  content: string;
-}
+import AuthDialog from "@/components/AuthDialog";
+import ChatMessages from "@/components/ChatMessages";
+import type { Message } from "@/types/chat";
 
 const Index = () => {
   const [prompt, setPrompt] = useState("");
@@ -60,17 +48,10 @@ const Index = () => {
 
   // Add message mutation
   const addMessage = useMutation({
-    mutationFn: async (message: { role: string; content: string }) => {
-      if (!session?.user?.id) {
-        throw new Error("User must be logged in to send messages");
-      }
-
+    mutationFn: async (message: { role: string; content: string; user_id: string }) => {
       const { error } = await supabase
         .from('chat_messages')
-        .insert([{
-          ...message,
-          user_id: session.user.id
-        }]);
+        .insert([message]);
       
       if (error) throw error;
     },
@@ -79,7 +60,11 @@ const Index = () => {
     }
   });
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e?: React.FormEvent) => {
+    if (e) {
+      e.preventDefault();
+    }
+
     if (!prompt.trim()) {
       toast({
         title: "Error",
@@ -100,7 +85,8 @@ const Index = () => {
       // Add user message
       await addMessage.mutateAsync({
         role: 'user',
-        content: prompt
+        content: prompt,
+        user_id: session.user.id
       });
 
       const { data, error } = await supabase.functions.invoke('generate-html', {
@@ -114,7 +100,8 @@ const Index = () => {
       // Add assistant message
       await addMessage.mutateAsync({
         role: 'assistant',
-        content: data.fullResponse
+        content: data.fullResponse,
+        user_id: session.user.id
       });
 
       if (data.htmlCode) {
@@ -141,40 +128,15 @@ const Index = () => {
 
       <div className="flex h-[calc(100vh-3rem)]">
         <div className="w-96 flex flex-col">
-          <div className="flex-1 p-4 overflow-y-auto">
-            {messages.map((message, idx) => (
-              <div key={idx} className="mb-6">
-                {message.role === 'user' ? (
-                  <div className="bg-[#18181B] rounded-lg p-4 max-w-[85%] ml-auto">
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  </div>
-                ) : (
-                  <div>
-                    <div className="flex items-center space-x-1.5 mb-1.5">
-                      <img src="https://gptengineer.app/img/lovable-logo.svg" alt="Lovable Logo" className="h-4 w-4" />
-                      <span className="font-medium text-sm">Lovable</span>
-                    </div>
-                    <div className="ml-4 text-sm whitespace-pre-wrap">
-                      {message.content.split('\n').map((part, index) => (
-                        <span key={index}>
-                          {part}
-                          {generatedHtml && index === 0 && (
-                            <CodeBox showCode={showCode} setShowCode={setShowCode} />
-                          )}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
+          <ChatMessages 
+            messages={messages}
+            showCode={showCode}
+            setShowCode={setShowCode}
+            generatedHtml={generatedHtml}
+          />
 
           <div className="p-4">
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              handleSubmit();
-            }}>
+            <form onSubmit={handleSubmit}>
               <Input 
                 placeholder="Request HTML generation..." 
                 className="bg-[#18181B] border-0 focus:bg-[#27272A] rounded-xl focus:outline-none focus:ring-0"
@@ -196,22 +158,10 @@ const Index = () => {
         />
       </div>
 
-      <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Sign in to continue</DialogTitle>
-            <DialogDescription>
-              Please sign in or create an account to use the HTML generator.
-            </DialogDescription>
-          </DialogHeader>
-          <Auth
-            supabaseClient={supabase}
-            appearance={{ theme: ThemeSupa }}
-            theme="dark"
-            providers={[]}
-          />
-        </DialogContent>
-      </Dialog>
+      <AuthDialog 
+        open={showAuthDialog} 
+        onOpenChange={setShowAuthDialog}
+      />
     </div>
   );
 };
