@@ -153,7 +153,7 @@ const Index = () => {
               {prompt.trim() && (
                 <Button
                   onClick={handleSubmit}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 h-8 w-8 rounded-full bg-white hover:bg-gray-100"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 h-6 w-6 rounded-full bg-white hover:bg-gray-100"
                 >
                   <ArrowUp className="h-4 w-4 text-black" />
                 </Button>
