@@ -14,7 +14,20 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt } = await req.json();
+    const { prompt, chatHistory } = await req.json();
+
+    // Convert chat history to OpenAI message format
+    const messages = [
+      { 
+        role: 'system', 
+        content: 'You are a helpful assistant that generates HTML code based on user prompts. Always wrap your HTML code in ```html and ``` tags.'
+      },
+      ...chatHistory.map((msg: { role: string; content: string }) => ({
+        role: msg.role,
+        content: msg.content
+      })),
+      { role: 'user', content: prompt }
+    ];
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -24,13 +37,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
-        messages: [
-          { 
-            role: 'system', 
-            content: 'You are a helpful assistant that generates HTML code based on user prompts. Always wrap your HTML code in ```html and ``` tags.'
-          },
-          { role: 'user', content: prompt }
-        ],
+        messages,
       }),
     });
 

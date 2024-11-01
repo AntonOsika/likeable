@@ -94,7 +94,10 @@ const Index = () => {
       });
 
       const { data, error } = await supabase.functions.invoke('generate-html', {
-        body: { prompt },
+        body: { 
+          prompt,
+          chatHistory: messages 
+        },
       });
 
       if (error) throw error;
