@@ -9,11 +9,18 @@ interface ChatMessagesProps {
 }
 
 const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMessagesProps) => {
-  const filterCodeBlocks = (content: string) => {
-    // Remove all content between ```html and ``` including the markers
-    const filteredContent = content.replace(/```html[\s\S]*?```/g, '').trim();
-    // Remove any trailing newlines that might be left
-    return filteredContent.replace(/\n+$/, '');
+  const renderMessageContent = (content: string) => {
+    const parts = content.split(/(```html[\s\S]*?```)/);
+    return parts.map((part, index) => {
+      if (part.startsWith('```html')) {
+        // This is a code block, render the CodeBox here if we have generated HTML
+        return generatedHtml ? (
+          <CodeBox key={index} showCode={showCode} setShowCode={setShowCode} />
+        ) : null;
+      }
+      // This is regular text, render it normally
+      return <span key={index}>{part}</span>;
+    });
   };
 
   return (
@@ -35,10 +42,7 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
                 <span className="font-medium text-sm">Lovable</span>
               </div>
               <div className="ml-4 text-sm whitespace-pre-wrap">
-                {filterCodeBlocks(message.content)}
-                {message.content.includes('```html') && generatedHtml && (
-                  <CodeBox showCode={showCode} setShowCode={setShowCode} />
-                )}
+                {renderMessageContent(message.content)}
               </div>
             </div>
           )}
