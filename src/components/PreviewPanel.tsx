@@ -77,7 +77,7 @@ const PreviewPanel = ({
         ) : (
           <div className="flex items-center justify-center h-full bg-black">
             <div className="text-center">
-              <div className="w-16 h-16 bg-white rounded-lg mx-auto mb-4 flex items-center justify-center">
+              <div className="w-16 h-16 bg-white rounded-2xl mx-auto mb-4 flex items-center justify-center">
                 <span className="text-3xl text-black font-mono font-bold">&gt;_</span>
               </div>
               <p className="text-gray-400">Enter a prompt to generate content</p>
