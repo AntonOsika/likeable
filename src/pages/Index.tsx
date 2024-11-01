@@ -29,7 +29,7 @@ const Index = () => {
   });
 
   // Fetch messages query
-  const { data: messages = [] } = useQuery({
+  const { data: messages = [] } = useQuery<Message[]>({
     queryKey: ['messages'],
     queryFn: async () => {
       const { data: messages, error } = await supabase
@@ -38,8 +38,9 @@ const Index = () => {
         .order('created_at', { ascending: true });
       
       if (error) throw error;
+      
       return messages.map(msg => ({
-        role: msg.role,
+        role: msg.role as 'user' | 'assistant',
         content: msg.content
       }));
     },
@@ -48,7 +49,7 @@ const Index = () => {
 
   // Add message mutation
   const addMessage = useMutation({
-    mutationFn: async (message: { role: string; content: string; user_id: string }) => {
+    mutationFn: async (message: { role: 'user' | 'assistant'; content: string; user_id: string }) => {
       const { error } = await supabase
         .from('chat_messages')
         .insert([message]);

@@ -38,13 +38,6 @@ const AuthDialog = ({ open, onOpenChange }: AuthDialogProps) => {
           }}
           theme="dark"
           providers={[]}
-          onError={(error) => {
-            toast({
-              title: "Error",
-              description: error.message,
-              variant: "destructive",
-            });
-          }}
         />
       </DialogContent>
     </Dialog>
