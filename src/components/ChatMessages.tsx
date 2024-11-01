@@ -23,14 +23,14 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
       }
       // For non-code parts, remove markdown syntax and render
       const cleanText = part
-        .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold syntax
-        .replace(/\*(.*?)\*/g, '$1')      // Remove italic syntax
-        .replace(/`(.*?)`/g, '$1')        // Remove inline code syntax
-        .replace(/\[(.*?)\]\((.*?)\)/g, '$1') // Remove link syntax
-        .replace(/#/g, '')                // Remove hashtag characters
+        .replace(/\*\*(.*?)\*\*/g, '$1')
+        .replace(/\*(.*?)\*/g, '$1')
+        .replace(/`(.*?)`/g, '$1')
+        .replace(/\[(.*?)\]\((.*?)\)/g, '$1')
+        .replace(/#/g, '')
         .trim();
-      return <span key={index}>{cleanText}</span>;
-    });
+      return cleanText ? <span key={index}>{cleanText}</span> : null;
+    }).filter(Boolean); // Remove null values
   };
 
   return (
@@ -39,7 +39,7 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
         <div key={idx}>
           {message.role === 'user' ? (
             <div className="bg-[#18181B] rounded-lg p-3 max-w-[85%] ml-auto">
-              <p className="text-sm whitespace-pre-wrap">{renderMessageContent(message.content)}</p>
+              <p className="text-sm whitespace-pre-wrap">{message.content}</p>
             </div>
           ) : (
             <div>
