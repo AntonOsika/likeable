@@ -9,10 +9,6 @@ interface ChatMessagesProps {
 }
 
 const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMessagesProps) => {
-  const filterCodeBlocks = (content: string) => {
-    return content.replace(/```html[\s\S]*?```/g, '').trim();
-  };
-
   return (
     <div className="flex-1 p-4 overflow-y-auto">
       {messages.map((message, idx) => (
@@ -32,8 +28,14 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
                 <span className="font-medium text-sm">Lovable</span>
               </div>
               <div className="ml-4 text-sm whitespace-pre-wrap">
-                {filterCodeBlocks(message.content)}
-                {generatedHtml && <CodeBox showCode={showCode} setShowCode={setShowCode} />}
+                {message.content.split('\n').map((part, index) => (
+                  <span key={index}>
+                    {part}
+                    {generatedHtml && index === 0 && (
+                      <CodeBox showCode={showCode} setShowCode={setShowCode} />
+                    )}
+                  </span>
+                ))}
               </div>
             </div>
           )}

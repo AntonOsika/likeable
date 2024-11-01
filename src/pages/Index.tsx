@@ -102,13 +102,10 @@ const Index = () => {
 
       if (error) throw error;
 
-      // Clean the response content before storing
-      const cleanedContent = data.fullResponse.replace(/```html\n|\n```/g, '');
-
-      // Add assistant message with cleaned content
+      // Add assistant message
       await addMessage.mutateAsync({
         role: 'assistant',
-        content: cleanedContent,
+        content: data.fullResponse,
         user_id: session.user.id
       });
 
