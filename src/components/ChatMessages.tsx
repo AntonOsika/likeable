@@ -24,9 +24,9 @@ const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMe
   };
 
   return (
-    <div className="flex-1 p-4 overflow-y-auto">
+    <div className="flex-1 p-4 overflow-y-auto space-y-4">
       {messages.map((message, idx) => (
-        <div key={idx} className="mb-6">
+        <div key={idx}>
           {message.role === 'user' ? (
             <div className="bg-[#18181B] rounded-lg p-4 max-w-[85%] ml-auto">
               <p className="text-sm whitespace-pre-wrap">{message.content}</p>
