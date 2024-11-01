@@ -8,6 +8,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AuthDialog from "@/components/AuthDialog";
 import ChatMessages from "@/components/ChatMessages";
 import type { Message } from "@/types/chat";
+import { Button } from "@/components/ui/button";
+import { ArrowUp } from "lucide-react";
 
 const Index = () => {
   const [prompt, setPrompt] = useState("");
@@ -141,13 +143,21 @@ const Index = () => {
           />
 
           <div className="p-4">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="relative">
               <Input 
                 placeholder="Request HTML generation..." 
                 className="bg-[#18181B] border-0 focus:bg-[#27272A] rounded-xl focus:outline-none focus:ring-0"
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
               />
+              {prompt.trim() && (
+                <Button
+                  onClick={handleSubmit}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 h-8 w-8 rounded-full bg-white hover:bg-gray-100"
+                >
+                  <ArrowUp className="h-4 w-4 text-black" />
+                </Button>
+              )}
             </form>
             <p className="text-xs text-gray-500 mt-2 text-center">
               Press Enter to generate HTML code
