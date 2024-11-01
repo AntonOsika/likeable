@@ -6,6 +6,15 @@ import Navigation from "@/components/Navigation";
 import PreviewPanel from "@/components/PreviewPanel";
 import CodeBox from "@/components/CodeBox";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Message {
   role: 'user' | 'assistant';
@@ -17,6 +26,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
+  const [showAuthDialog, setShowAuthDialog] = useState(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
@@ -80,11 +90,7 @@ const Index = () => {
     }
 
     if (!session?.user) {
-      toast({
-        title: "Error",
-        description: "Please sign in to continue",
-        variant: "destructive",
-      });
+      setShowAuthDialog(true);
       return;
     }
 
@@ -189,6 +195,23 @@ const Index = () => {
           setGeneratedHtml={setGeneratedHtml}
         />
       </div>
+
+      <Dialog open={showAuthDialog} onOpenChange={setShowAuthDialog}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>Sign in to continue</DialogTitle>
+            <DialogDescription>
+              Please sign in or create an account to use the HTML generator.
+            </DialogDescription>
+          </DialogHeader>
+          <Auth
+            supabaseClient={supabase}
+            appearance={{ theme: ThemeSupa }}
+            theme="dark"
+            providers={[]}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
