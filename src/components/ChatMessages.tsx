@@ -10,7 +10,10 @@ interface ChatMessagesProps {
 
 const ChatMessages = ({ messages, showCode, setShowCode, generatedHtml }: ChatMessagesProps) => {
   const filterCodeBlocks = (content: string) => {
-    return content.replace(/```html[\s\S]*?```/g, '').trim();
+    // Remove all content between ```html and ``` including the markers
+    const filteredContent = content.replace(/```html[\s\S]*?```/g, '').trim();
+    // Remove any trailing newlines that might be left
+    return filteredContent.replace(/\n+$/, '');
   };
 
   return (
