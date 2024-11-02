@@ -53,9 +53,11 @@ const ProjectView = () => {
   }
 
   return (
-    <div 
+    <iframe 
+      srcDoc={project.html_content}
       className="min-h-screen w-full"
-      dangerouslySetInnerHTML={{ __html: project.html_content }}
+      sandbox="allow-scripts"
+      title="Generated HTML Preview"
     />
   );
 };
