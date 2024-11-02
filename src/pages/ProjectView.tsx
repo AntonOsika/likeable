@@ -1,9 +1,12 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Home } from "lucide-react";
 
 const ProjectView = () => {
   const { projectName } = useParams<{ projectName: string }>();
+  const navigate = useNavigate();
 
   const { data: project, isLoading, error } = useQuery({
     queryKey: ['project', projectName],
@@ -14,18 +17,14 @@ const ProjectView = () => {
         .from('published_projects')
         .select('html_content')
         .eq('project_name', projectName)
-        .single();
+        .maybeSingle();
       
-      if (error) {
-        if (error.message.includes("JSON object requested, multiple (or no) rows returned")) {
-          throw new Error("Project not found");
-        }
-        throw error;
-      }
+      if (error) throw error;
+      if (!data) throw new Error("Project not found");
       
       return data;
     },
-    enabled: !!projectName,
+    retry: false,
   });
 
   if (isLoading) {
@@ -38,10 +37,17 @@ const ProjectView = () => {
 
   if (error || !project) {
     return (
-      <div className="flex items-center justify-center h-screen bg-white">
+      <div className="flex flex-col items-center justify-center h-screen bg-white gap-4">
         <h1 className="text-2xl text-gray-900">
           {error?.message || "Project not found"}
         </h1>
+        <Button 
+          onClick={() => navigate('/')}
+          className="flex items-center gap-2"
+        >
+          <Home className="w-4 h-4" />
+          Go Home
+        </Button>
       </div>
     );
   }
