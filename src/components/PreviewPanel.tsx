@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Copy, RotateCw } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { Highlight, themes } from "prism-react-renderer";
+import { useState, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PreviewPanelProps {
   generatedHtml: string | null;
@@ -17,6 +19,55 @@ const PreviewPanel = ({
   setGeneratedHtml 
 }: PreviewPanelProps) => {
   const { toast } = useToast();
+  const [editableCode, setEditableCode] = useState(generatedHtml);
+
+  useEffect(() => {
+    setEditableCode(generatedHtml);
+  }, [generatedHtml]);
+
+  const handleSave = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        toast({
+          title: "Error",
+          description: "You must be logged in to save changes",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      if (!editableCode) {
+        toast({
+          title: "Error",
+          description: "No code to save",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const { error } = await supabase
+        .from('html_edits')
+        .insert([
+          { user_id: user.id, html_content: editableCode }
+        ]);
+
+      if (error) throw error;
+
+      setGeneratedHtml(editableCode);
+      toast({
+        title: "Success",
+        description: "Code saved successfully",
+      });
+    } catch (error) {
+      console.error('Error saving code:', error);
+      toast({
+        title: "Error",
+        description: "Failed to save changes",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="flex-1 bg-[#09090B] rounded-xl border border-[#27272A]">
@@ -28,21 +79,22 @@ const PreviewPanel = ({
           <Button 
             className="items-center justify-center text-sm font-light ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
             onClick={() => {
-              if (generatedHtml) {
-                navigator.clipboard.writeText(generatedHtml);
+              if (editableCode) {
+                navigator.clipboard.writeText(editableCode);
                 toast({
                   title: "Copied!",
                   description: "HTML code copied to clipboard",
                 });
               }
             }}
-            disabled={!generatedHtml}
+            disabled={!editableCode}
           >
             <Copy className="h-4 w-4 text-white" />
           </Button>
           <Button 
             className="items-center justify-center text-sm font-light ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-muted hover:text-primary h-7 px-1 rounded-md py-1 gap-1.5 hidden md:flex bg-[#09090B]"
-            disabled={!generatedHtml}
+            onClick={handleSave}
+            disabled={!editableCode}
           >
             <RotateCw className="h-4 w-4 text-white" />
           </Button>
@@ -59,31 +111,19 @@ const PreviewPanel = ({
               <p className="text-gray-400">Generating content...</p>
             </div>
           </div>
-        ) : generatedHtml ? (
+        ) : editableCode ? (
           showCode ? (
             <div className="w-full h-full overflow-auto rounded-b-xl bg-[#09090B]">
-              <Highlight
-                theme={themes.nightOwl}
-                code={generatedHtml}
-                language="html"
-              >
-                {({ className, style, tokens, getLineProps, getTokenProps }) => (
-                  <pre className={`${className} p-4`} style={style}>
-                    {tokens.map((line, i) => (
-                      <div key={i} {...getLineProps({ line })}>
-                        <span className="text-gray-500 mr-4">{i + 1}</span>
-                        {line.map((token, key) => (
-                          <span key={key} {...getTokenProps({ token })} />
-                        ))}
-                      </div>
-                    ))}
-                  </pre>
-                )}
-              </Highlight>
+              <textarea
+                value={editableCode}
+                onChange={(e) => setEditableCode(e.target.value)}
+                className="w-full h-full p-4 bg-[#09090B] text-white font-mono resize-none focus:outline-none"
+                spellCheck="false"
+              />
             </div>
           ) : (
             <iframe
-              srcDoc={generatedHtml}
+              srcDoc={editableCode}
               className="w-full h-full bg-white rounded-b-xl"
               sandbox="allow-scripts"
               title="Generated HTML Preview"
