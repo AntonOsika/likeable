@@ -39,6 +39,23 @@ const PublishDialog = ({ open, onOpenChange, htmlContent }: PublishDialogProps) 
 
     setIsPublishing(true);
     try {
+      // First check if project name exists
+      const { data: existingProject } = await supabase
+        .from('published_projects')
+        .select('id')
+        .eq('project_name', projectName)
+        .single();
+
+      if (existingProject) {
+        toast({
+          title: "Error",
+          description: "A project with this name already exists. Please choose a different name.",
+          variant: "destructive",
+        });
+        setIsPublishing(false);
+        return;
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error("Not authenticated");
 
@@ -58,11 +75,10 @@ const PublishDialog = ({ open, onOpenChange, htmlContent }: PublishDialogProps) 
       onOpenChange(false);
       navigate(`/${projectName}`);
     } catch (error: any) {
+      console.error('Error publishing project:', error);
       toast({
         title: "Error",
-        description: error.message === "duplicate key value violates unique constraint \"published_projects_project_name_key\""
-          ? "Project name already exists"
-          : "Failed to publish project",
+        description: "Failed to publish project. Please try again.",
         variant: "destructive",
       });
     } finally {
