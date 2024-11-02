@@ -318,6 +318,30 @@ export type Database = {
         }
         Relationships: []
       }
+      published_projects: {
+        Row: {
+          created_at: string
+          html_content: string
+          id: string
+          project_name: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          html_content: string
+          id?: string
+          project_name: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          html_content?: string
+          id?: string
+          project_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       twitter_predictions: {
         Row: {
           created_at: string

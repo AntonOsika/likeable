@@ -1,21 +1,20 @@
-import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import type { Message } from "@/types/chat";
 import Navigation from "@/components/Navigation";
 import PreviewPanel from "@/components/PreviewPanel";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import AuthDialog from "@/components/AuthDialog";
-import ChatMessages from "@/components/ChatMessages";
-import type { Message } from "@/types/chat";
-import { Button } from "@/components/ui/button";
-import { ArrowUp } from "lucide-react";
+import ChatSection from "@/components/ChatSection";
+import PublishDialog from "@/components/PublishDialog";
 
 const Index = () => {
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [showCode, setShowCode] = useState(false);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
   const [generatedHtml, setGeneratedHtml] = useState<string | null>(() => {
     const saved = localStorage.getItem("generatedHtml");
     return saved ? saved : null;
@@ -118,7 +117,6 @@ const Index = () => {
         user_id: session.user.id
       });
 
-      // Get only the last 3 messages for context
       const recentMessages = messages.slice(-3);
 
       const { data, error } = await supabase.functions.invoke('generate-html', {
@@ -153,37 +151,18 @@ const Index = () => {
 
   return (
     <div className="h-screen overflow-hidden bg-[#09090B] text-white">
-      <Navigation />
+      <Navigation onPublish={() => setShowPublishDialog(true)} />
       <div className="flex h-[calc(100vh-3rem)]">
-        <div className="w-96 flex flex-col">
-          <ChatMessages 
-            messages={messages}
-            showCode={showCode}
-            setShowCode={setShowCode}
-            generatedHtml={generatedHtml}
-          />
-          <div className="p-4">
-            <form onSubmit={handleSubmit} className="relative">
-              <Input 
-                placeholder="Request HTML generation..." 
-                className="bg-[#18181B] border-0 focus:bg-[#27272A] rounded-xl focus:outline-none focus:ring-0"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-              />
-              {prompt.trim() && (
-                <Button
-                  onClick={handleSubmit}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 h-6 w-6 rounded-full bg-white hover:bg-gray-100"
-                >
-                  <ArrowUp className="h-4 w-4 text-black" />
-                </Button>
-              )}
-            </form>
-            <p className="text-xs text-gray-500 mt-2 text-center">
-              Press Enter to generate HTML code
-            </p>
-          </div>
-        </div>
+        <ChatSection 
+          messages={messages}
+          showCode={showCode}
+          setShowCode={setShowCode}
+          generatedHtml={generatedHtml}
+          isLoading={isLoading}
+          handleSubmit={handleSubmit}
+          prompt={prompt}
+          setPrompt={setPrompt}
+        />
         <PreviewPanel 
           generatedHtml={generatedHtml}
           isLoading={isLoading}
@@ -194,6 +173,11 @@ const Index = () => {
       <AuthDialog 
         open={showAuthDialog} 
         onOpenChange={setShowAuthDialog}
+      />
+      <PublishDialog
+        open={showPublishDialog}
+        onOpenChange={setShowPublishDialog}
+        htmlContent={generatedHtml}
       />
     </div>
   );
