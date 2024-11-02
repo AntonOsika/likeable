@@ -2,13 +2,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Home } from "lucide-react";
+import { Home, RotateCw } from "lucide-react";
 
 const ProjectView = () => {
   const { projectName } = useParams<{ projectName: string }>();
   const navigate = useNavigate();
 
-  const { data: project, isLoading, error } = useQuery({
+  const { data: project, isLoading, error, refetch } = useQuery({
     queryKey: ['project', projectName],
     queryFn: async () => {
       if (!projectName) throw new Error("Project name is required");
@@ -53,12 +53,21 @@ const ProjectView = () => {
   }
 
   return (
-    <iframe 
-      srcDoc={project.html_content}
-      className="min-h-screen w-full"
-      sandbox="allow-scripts"
-      title="Generated HTML Preview"
-    />
+    <div className="relative">
+      <Button
+        onClick={() => refetch()}
+        className="absolute top-4 right-4 z-10"
+      >
+        <RotateCw className="w-4 h-4 mr-2" />
+        Refresh
+      </Button>
+      <iframe 
+        srcDoc={project.html_content}
+        className="min-h-screen w-full"
+        sandbox="allow-scripts"
+        title="Generated HTML Preview"
+      />
+    </div>
   );
 };
 
