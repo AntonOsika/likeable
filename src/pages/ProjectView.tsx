@@ -47,11 +47,9 @@ const ProjectView = () => {
   }
 
   return (
-    <iframe
-      srcDoc={project.html_content}
-      className="w-full h-screen border-0"
-      sandbox="allow-scripts"
-      title="Published Project Preview"
+    <div 
+      className="w-full h-screen"
+      dangerouslySetInnerHTML={{ __html: project.html_content }}
     />
   );
 };
