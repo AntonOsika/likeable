@@ -54,7 +54,7 @@ const ProjectView = () => {
 
   return (
     <div 
-      className="w-full h-screen"
+      className="min-h-screen w-full"
       dangerouslySetInnerHTML={{ __html: project.html_content }}
     />
   );
